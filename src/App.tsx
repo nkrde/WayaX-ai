@@ -844,8 +844,8 @@ Click any standard preset queries on the right panel to test predefined cached a
 
         {/* Workspace dynamic contents */}
         {isEmptyChat ? (
-          <div id="main-chat-viewport" className={`flex-1 overflow-y-auto pt-[84px] ${getMobilePaddingBottom()} md:py-6 px-3 md:px-4 flex flex-col relative min-h-0 select-none justify-start md:justify-center`}>
-            <div className="flex-1 w-full max-w-5xl mx-auto z-20 flex flex-col items-center justify-start md:justify-center my-0 md:my-auto transition-all duration-300">
+          <div id="main-chat-viewport" className={`flex-1 overflow-y-auto pt-[84px] ${getMobilePaddingBottom()} md:py-6 px-3 md:px-4 flex flex-col relative min-h-0 select-none justify-center`}>
+            <div className="flex-1 w-full max-w-5xl mx-auto z-20 flex flex-col items-center justify-center my-auto transition-all duration-300">
               {/* Main Titles */}
               <div className={`flex-none md:flex-1 flex flex-col justify-center md:justify-end w-full ${isDropdownOpen ? 'mt-1 mb-3.5 xs:mb-4 md:mb-6' : 'mt-2 md:mt-0 mb-4 xs:mb-5 md:mb-8'} min-h-0`}>
                 <div className="flex flex-col items-center justify-center space-y-1 md:space-y-4 text-center select-none font-sans w-full">
