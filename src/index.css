@@ -1,0 +1,305 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+html, body, #root {
+  background-color: #000000;
+  margin: 0;
+  padding: 0;
+}
+
+@theme {
+  --font-sans: "Sora", ui-sans-serif, system-ui, sans-serif;
+  --font-secondary: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+@keyframes flowGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes spinGradient {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes softGlow {
+  0%, 100% {
+    transform: scale(0.99);
+    opacity: 0.15;
+    filter: blur(5px);
+  }
+  50% {
+    transform: scale(1.005);
+    opacity: 0.35;
+    filter: blur(7px);
+  }
+}
+
+@keyframes causticRayRight {
+  0% { transform: translateY(-3%) rotate(-14deg) scaleX(1); opacity: 0.22; }
+  50% { transform: translateY(3%) rotate(-9deg) scaleX(1.2); opacity: 0.42; }
+  100% { transform: translateY(-3%) rotate(-14deg) scaleX(1); opacity: 0.22; }
+}
+
+@keyframes causticRayLeft {
+  0% { transform: translateY(4%) rotate(12deg) scaleX(1.15); opacity: 0.26; }
+  50% { transform: translateY(-3%) rotate(16deg) scaleX(0.85); opacity: 0.52; }
+  100% { transform: translateY(4%) rotate(12deg) scaleX(1.15); opacity: 0.26; }
+}
+
+@keyframes waterRipple {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 50% 100%; }
+  100% { background-position: 0% 0%; }
+}
+
+@keyframes floatElement {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(0.5deg); }
+}
+
+@keyframes glowWave {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.65; }
+}
+
+@keyframes outlineBreathing {
+  0%, 100% {
+    opacity: 0.35;
+    filter: blur(2px);
+  }
+  50% {
+    opacity: 0.8;
+    filter: blur(4px);
+  }
+}
+
+.animate-outline-breathing {
+  animation: outlineBreathing 4s ease-in-out infinite;
+}
+
+.animate-gradient-flow {
+  background-size: 200% 200%;
+  animation: flowGradient 6s ease-in-out infinite;
+}
+
+.animate-spin-gradient {
+  animation: spinGradient 15s linear infinite;
+}
+
+.animate-soft-glow {
+  animation: softGlow 4s ease-in-out infinite;
+}
+
+.animate-caustic-right {
+  animation: causticRayRight 10s ease-in-out infinite;
+}
+
+.animate-caustic-left {
+  animation: causticRayLeft 13s ease-in-out infinite;
+}
+
+.animate-ripple {
+  animation: waterRipple 22s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: floatElement 7s ease-in-out infinite;
+}
+
+.animate-glow-wave {
+  animation: glowWave 8s ease-in-out infinite;
+}
+
+/* Liquid glass panel classes */
+.liquid-glass-panel {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(28px) saturate(175%);
+  -webkit-backdrop-filter: blur(28px) saturate(175%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1.5px 3px 0 rgba(0, 0, 0, 0.25),
+    0 12px 40px 0 rgba(0, 0, 0, 0.45);
+}
+
+/* Interactive light reflection shimmer overlay */
+.liquid-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.liquid-shimmer::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    35deg,
+    transparent 45%,
+    rgba(255, 255, 255, 0.06) 48%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0.06) 52%,
+    transparent 55%
+  );
+  transform: rotate(-25deg);
+  pointer-events: none;
+  transition: transform 0.6s ease;
+}
+
+.liquid-shimmer:hover::before {
+  transform: translate(15%, 15%) rotate(-25deg);
+}
+
+/* Mask to create an outline glow */
+.mask-gradient-glow {
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+.liquid-glass-button {
+  background: rgba(255, 255, 255, 0.035);
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.18), 
+    0 4px 15px 0 rgba(0, 0, 0, 0.2);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.liquid-glass-button:hover {
+  background: rgba(255, 255, 255, 0.085);
+  border-color: rgba(255, 255, 255, 0.24);
+  box-shadow: 
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.35), 
+    0 0 25px 0 rgba(255, 255, 255, 0.12);
+  transform: translateY(-1.5px);
+}
+
+.liquid-glass-input {
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.35);
+  transition: all 0.25s ease;
+}
+
+.liquid-glass-input:focus {
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(0, 0, 0, 0.3);
+  box-shadow: 
+    inset 0 2px 4px 0 rgba(0, 0, 0, 0.45), 
+    0 0 18px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* Custom Scrollbar Styles for elegant minimalism */
+.custom-scroll::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.custom-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.light .custom-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+}
+.light .custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* Chromatic aberration text/border classes */
+.text-chromatic {
+  text-shadow: 
+    -0.8px -0.8px 0.5px rgba(0, 240, 255, 0.35), 
+    0.8px 0.8px 0.5px rgba(255, 0, 128, 0.35);
+}
+
+.border-chromatic {
+  border-color: rgba(193, 114, 241, 0.2);
+  box-shadow: 
+    -1px -1px 2px rgba(6, 182, 212, 0.12),
+    1px 1px 2px rgba(236, 72, 153, 0.12);
+}
+
+/* Subtle Dotted Grid Background */
+.bg-dotted-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 12px 12px;
+}
+
+.bg-dotted-grid-light {
+  background-image: radial-gradient(rgba(0, 0, 0, 0.08) 1px, transparent 1px);
+  background-size: 12px 12px;
+}
+
+/* Light theme overrides for glass elements */
+.light .liquid-glass-panel {
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 
+    inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -1.5px 3px 0 rgba(0, 0, 0, 0.02),
+    0 12px 40px 0 rgba(0, 0, 0, 0.08);
+}
+
+.light .liquid-glass-button {
+  background: rgba(0, 0, 0, 0.035);
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.6), 
+    0 4px 15px 0 rgba(0, 0, 0, 0.03);
+  color: #1c1c1f;
+}
+
+.light .liquid-glass-button:hover {
+  background: rgba(0, 0, 0, 0.075);
+  border-color: rgba(0, 0, 0, 0.16);
+  box-shadow: 
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.75), 
+    0 0 25px 0 rgba(0, 0, 0, 0.04);
+}
+
+.light .liquid-glass-input {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.03);
+}
+
+.light .liquid-glass-input:focus {
+  border-color: rgba(99, 102, 241, 0.35);
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow: 
+    inset 0 2px 4px 0 rgba(0, 0, 0, 0.04), 
+    0 0 18px 0 rgba(99, 102, 241, 0.05);
+}
+

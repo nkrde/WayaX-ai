@@ -1,0 +1,6 @@
+{
+  "name": "WayaX: SEBI-Compliant AI Investment Assistant",
+  "description": "An interactive, SEBI-compliant AI investment assistant providing technical & fundamental analysis, expandable thesis cards, past chat memory, and smart presets.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

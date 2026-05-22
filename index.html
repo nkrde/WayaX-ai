@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script>
+      // Defensive fix for "TypeError: Cannot set property fetch of #<Window> which has only a getter"
+      (function() {
+        try {
+          var originalFetch = window.fetch;
+          var fetchStorage = originalFetch;
+          Object.defineProperty(window, 'fetch', {
+            get: function() {
+              return fetchStorage;
+            },
+            set: function(newValue) {
+              fetchStorage = newValue;
+            },
+            configurable: true,
+            enumerable: true
+          });
+        } catch (e) {
+          console.warn("Defensive fetch-patch: Unable to redefine window.fetch directly.", e);
+          try {
+            if (typeof Window !== 'undefined' && Window.prototype) {
+              var desc = Object.getOwnPropertyDescriptor(Window.prototype, 'fetch');
+              if (desc && desc.configurable) {
+                Object.defineProperty(Window.prototype, 'fetch', {
+                  get: function() { return fetchStorage; },
+                  set: function(newValue) { fetchStorage = newValue; },
+                  configurable: true,
+                  enumerable: true
+                });
+              }
+            }
+          } catch (prototypeError) {
+            console.warn("Defensive fetch-patch: Unable to redefine Window.prototype.fetch.", prototypeError);
+          }
+        }
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Google AI Studio App</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
