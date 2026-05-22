@@ -86,6 +86,16 @@ export default function App() {
     if (isQuestionsOpen) return 'pb-[320px]';
     return 'pb-[180px]';
   };
+
+  const getChatMobilePaddingBottom = (msgs: ChatMessage[]) => {
+    const activeSurveyMsg = msgs.length > 0 && msgs[msgs.length - 1].isSurvey 
+      ? msgs[msgs.length - 1] 
+      : null;
+    if (activeSurveyMsg) {
+      return 'pb-[460px] md:pb-6';
+    }
+    return 'pb-[120px] md:pb-6';
+  };
   
   const [showSplash, setShowSplash] = useState<boolean>(true);
   
@@ -775,8 +785,8 @@ Click any standard preset queries on the right panel to test predefined cached a
         {/* Navigation Bar */}
         <header className={`fixed top-0 left-0 right-0 md:relative p-4 flex items-center justify-between border-b z-30 md:z-10 transition-all duration-300 ${
           theme === 'light' 
-            ? 'border-slate-200 text-slate-800 bg-white/50 backdrop-blur-[24px] saturate-[130%]' 
-            : 'border-white/5 bg-white/[0.015] backdrop-blur-[24px] saturate-[130%]'
+            ? 'border-slate-200 text-slate-800 bg-[#F2F2F7]/95 backdrop-blur-[24px] saturate-[130%]' 
+            : 'border-white/5 bg-[#1c1c1e]/90 backdrop-blur-[24px] saturate-[130%]'
         }`}>
           <div className="flex items-center gap-3">
             <button
@@ -1078,7 +1088,7 @@ Click any standard preset queries on the right panel to test predefined cached a
         ) : (
           <div className="flex-1 flex flex-col justify-between overflow-hidden relative min-h-0 pt-[65px] md:pt-0">
             {/* Scrollable messages and advisory list */}
-            <div id="main-chat-viewport" className="flex-1 overflow-y-auto px-3 md:px-4 py-3 md:py-6 space-y-4 md:space-y-6">
+            <div id="main-chat-viewport" className={`flex-1 overflow-y-auto px-3 md:px-4 py-3 md:py-6 space-y-4 md:space-y-6 ${getChatMobilePaddingBottom(messages)}`}>
               <div className="max-w-5xl mx-auto space-y-6">
                 {messages.map((msg) => {
                   const isUser = msg.sender === 'user';
@@ -1281,10 +1291,10 @@ Click any standard preset queries on the right panel to test predefined cached a
             </div>
 
             {/* Seamless Active search bar anchored down on screen with beautiful backdrop shadow and space */}
-            <footer className={`p-3 md:p-4 z-20 select-none pb-3 md:pb-6 border-t md:border-t-0 animate-fade-in transition-all duration-300 ${
+            <footer className={`fixed bottom-0 left-0 right-0 md:relative p-3 md:p-4 z-20 select-none pb-4 md:pb-6 border-t md:border-t-0 animate-fade-in transition-all duration-300 ${
               theme === 'light'
-                ? 'bg-[#F2F2F7] md:bg-transparent border-slate-200/60 text-slate-800'
-                : 'bg-[#1c1c1e] md:bg-transparent border-white/5 text-slate-200'
+                ? 'bg-[#F2F2F7]/95 backdrop-blur-[24px] border-slate-200/60 text-slate-800'
+                : 'bg-[#1c1c1e]/95 backdrop-blur-[24px] border-white/5 text-slate-200'
             }`}>
               <div className="max-w-5xl mx-auto space-y-4">
                 {(() => {
