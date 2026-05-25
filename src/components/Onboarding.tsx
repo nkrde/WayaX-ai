@@ -52,50 +52,12 @@ export default function Onboarding({ onComplete, theme = 'dark', setTheme }: Onb
   const isLight = theme === 'light';
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#1C1C1E] to-[#000000] text-[#f1f5f9] flex flex-col md:flex-row font-secondary select-none w-full overflow-hidden relative">
+    <div className={`min-h-screen text-[#f1f5f9] flex flex-col md:flex-row font-secondary select-none w-full overflow-hidden relative transition-all duration-350 ${
+      isLight ? 'bg-white' : 'bg-[#0b0c10]'
+    }`}>
 
-      {/* Premium Screen-Wide Animated Gradients with Ethereal Bright Source & Caustic Rays */}
-      <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden z-0">
-        {/* Bright Ethereal Core Light Source */}
-        <div className={`absolute top-[-10%] left-[-15%] md:left-[-10%] w-[120%] md:w-[70%] h-[110%] rounded-full ${
-          isLight 
-            ? 'bg-[radial-gradient(circle_at_center,rgba(193,114,241,0.12)_0%,rgba(165,180,252,0.08)_30%,rgba(255,255,255,0.6)_60%,transparent_80%)]' 
-            : 'bg-[radial-gradient(circle_at_center,rgba(193,114,241,0.22)_0%,rgba(165,180,252,0.15)_30%,rgba(67,56,202,0.06)_60%,transparent_80%)]'
-        } pointer-events-none filter blur-[60px] animate-glow-wave`} />
-        
-        {/* Caustic Light Ray 1 (Sharp silver/white light rays filtering from top right) */}
-        <div className={`absolute top-[-30%] right-[-10%] w-[140%] h-[120%] ${
-          isLight 
-            ? 'bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.85)_0%,rgba(147,197,253,0.03)_50%,transparent_100%)]' 
-            : 'bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.18)_0%,rgba(147,197,253,0.08)_50%,transparent_100%)]'
-        } pointer-events-none filter blur-[8px] animate-caustic-right scale-x-[1.2] origin-top`} />
+      {/* Background is clean and solid as requested */}
 
-        {/* Caustic Light Ray 2 (Prismatic refraction filtering from bottom left) */}
-        <div className={`absolute bottom-[-10%] left-[-30%] w-[120%] h-[100%] ${
-          isLight 
-            ? 'bg-[radial-gradient(ellipse_at_bottom,rgba(255,255,255,0.65)_0%,rgba(196,181,253,0.02)_40%,transparent_80%)]' 
-            : 'bg-[radial-gradient(ellipse_at_bottom,rgba(255,255,255,0.12)_0%,rgba(196,181,253,0.07)_40%,transparent_80%)]'
-        } pointer-events-none filter blur-[15px] animate-caustic-left scale-y-[1.1] origin-bottom`} />
-
-        {/* Caustic Ripple Rays (Twin thin rotating highlight masks that catch refractive energy) */}
-        <div className={`absolute top-0 left-[15%] w-[3px] h-[180%] ${isLight ? 'bg-gradient-to-b from-black/0 via-indigo-600/5 to-black/0' : 'bg-gradient-to-b from-white/0 via-white/20 to-white/0'} transform -rotate-[22deg] blur-[4px] animate-caustic-right opacity-40 animate-pulse-slow`} />
-        <div className={`absolute top-0 left-[35%] w-[1.5px] h-[180%] ${isLight ? 'bg-gradient-to-b from-black/0 via-indigo-600/4 to-black/0' : 'bg-gradient-to-b from-white/0 via-[#6bb6f3]/25 to-white/0'} transform -rotate-[22deg] blur-[3px] animate-caustic-right opacity-30`} />
-        <div className={`absolute top-0 left-[55%] w-[4px] h-[180%] ${isLight ? 'bg-gradient-to-b from-black/0 via-purple-600/4 to-black/0' : 'bg-gradient-to-b from-white/0 via-[#c172f1]/20 to-white/0'} transform -rotate-[22deg] blur-[5px] animate-caustic-left opacity-35`} />
-
-        {/* Realistic Ray-traced Reflection shimmer surface mimicking depth */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] via-transparent to-black/[0.15]" />
-
-        {/* Subtle Dotted Grid Background Layer */}
-        <div className={`absolute inset-0 ${isLight ? 'bg-dotted-grid-light opacity-65' : 'bg-dotted-grid opacity-30'} pointer-events-none`} />
-
-        {/* Premium grain/noise texture overlay mapped seamlessly across entire background */}
-        <svg className="absolute inset-0 w-full h-full opacity-[0.03] mix-blend-overlay" xmlns="http://www.w3.org/2000/svg">
-          <filter id="noiseFilter">
-            <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
-          </filter>
-          <rect width="100%" height="100%" filter="url(#noiseFilter)" />
-        </svg>
-      </div>
 
       {/* Left Half: Aesthetic Container displaying the Brand Mark */}
       <div className="flex-1 min-h-[28vh] sm:min-h-[40vh] md:min-h-screen relative flex items-center justify-center z-10 bg-transparent mb-[-33px] md:mb-0">
@@ -134,7 +96,11 @@ export default function Onboarding({ onComplete, theme = 'dark', setTheme }: Onb
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.12, ease: 'easeOut' }}
             id="onboarding-card"
-            className={`w-full liquid-glass-panel rounded-2xl md:rounded-[24px] p-4.5 sm:p-8 relative z-10 ${isLight ? 'shadow-[0_20px_50px_rgba(0,0,0,0.06)]' : 'shadow-[0_20px_50px_rgba(0,0,0,0.7)]'}`}
+            className={`w-full rounded-2xl md:rounded-[24px] p-4.5 sm:p-8 relative z-10 border shadow-2xl backdrop-blur-3xl transition-all duration-300 ${
+              isLight
+                ? 'bg-gradient-to-b from-white/95 via-white/45 to-white/10 border-white/80'
+                : 'bg-gradient-to-b from-white/[0.06] via-white/[0.02] to-transparent border-white/[0.05]'
+            }`}
           >
             {step === 0 ? (
               <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">

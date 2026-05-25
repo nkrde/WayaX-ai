@@ -74,10 +74,11 @@ export default function Sidebar({
       <div 
         id="side-chat-panel" 
         onClick={onToggleSidebar}
-        className="group/panel hidden md:flex w-[68px] liquid-glass-panel flex flex-col items-center h-full select-none py-4 gap-4 cursor-pointer transition-all duration-300 border-r border-white/10 text-slate-100 animate-fade-in"
-        style={{
-          backgroundColor: isLight ? undefined : '#1c1c1e'
-        }}
+        className={`group/panel hidden md:flex w-[68px] flex flex-col items-center h-full select-none py-4 gap-4 cursor-pointer transition-all duration-300 border-r text-slate-100 animate-fade-in backdrop-blur-3xl shadow-2xl ${
+          isLight
+            ? 'bg-gradient-to-b from-white/95 via-white/45 to-white/10 border-white/80'
+            : 'bg-gradient-to-b from-white/[0.06] via-white/[0.02] to-transparent border-white/[0.05]'
+        }`}
       >
         {/* Toggle Button & Logo Area */}
         <div className="flex flex-col items-center w-full">
@@ -222,14 +223,11 @@ export default function Sidebar({
   return (
     <div 
       id="side-chat-panel" 
-      className={`w-80 fixed md:relative left-0 top-0 bottom-0 z-45 flex flex-col h-full select-none transition-all duration-300 ${
+      className={`w-80 fixed md:relative left-0 top-0 bottom-0 z-45 flex flex-col h-full select-none transition-all duration-300 border-r shadow-2xl backdrop-blur-3xl ${
         isLight 
-          ? 'bg-[#F2F2F7] md:bg-transparent text-slate-800' 
-          : 'text-slate-100'
-      } liquid-glass-panel border-r border-white/5 md:border-white/10`}
-      style={{
-        backgroundColor: isLight ? undefined : '#1c1c1e'
-      }}
+          ? 'text-slate-800 bg-gradient-to-b from-white/95 via-white/45 to-white/10 border-white/80' 
+          : 'text-slate-100 bg-gradient-to-b from-white/[0.06] via-white/[0.02] to-transparent border-white/[0.05]'
+      }`}
     >
       {/* Brand Header */}
       <div className={`p-4 h-[74px] flex items-center justify-between border-b ${isLight ? 'border-slate-200' : 'border-[#1e293b]'}`}>

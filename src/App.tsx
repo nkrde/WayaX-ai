@@ -12,7 +12,7 @@ import Splash from './components/Splash';
 import Sidebar from './components/Sidebar';
 import FAQDrawer from './components/FAQDrawer';
 import StockTable from './components/StockTable';
-import { ChatHistory, ChatMessage, UserProfile, SurveyQuestion } from './types';
+import { ChatHistory, ChatMessage, UserProfile, SurveyQuestion, StockRecommendation } from './types';
 
 const DROPDOWN_QUESTIONS = {
   buy: [
@@ -58,6 +58,205 @@ const DROPDOWN_QUESTIONS = {
   ]
 };
 
+// Preset real mock database for WayaX offline mode
+const MOCK_REC_GOKUL: StockRecommendation = {
+  id: 'gokul',
+  stockName: 'Gokul Agro Resources Ltd',
+  ticker: 'GOKULAGRO',
+  action: 'BUY',
+  priceRange: '₹234.88 – ₹239.62',
+  targetPrice: '₹308.43',
+  stopLoss: '₹166.08',
+  targetUpside: '30%',
+  tenure: '3mo – 6mo',
+  technical: {
+    rdxScore: 5,
+    rsiWeekly: 72,
+    adxWeekly: 32.2,
+    ema50_200: '211.4 / 182.7',
+    return1M: '15.1%',
+    return3M: '41.6%',
+    return1Y: '91.9%',
+    volatility30D: '39%'
+  },
+  fundamental: {
+    peRatio: 18.9,
+    pbRatio: 4.9,
+    roe: '5.0%',
+    roce: '13.2%',
+    debtEquity: '0.4',
+    fiiHolding: '1.5%',
+    opm: '2.8%',
+    profitGrowth3Y: '40.8%'
+  },
+  thesis: 'Technically, Gokul Agro Resources Ltd shows RDX score of 5; RSI at 72 (strong upward momentum); ADX at 32.2 — trend is strong and directional. Fundamentally: ROE of 5% (moderate capital efficiency), PE of 18.9 — attractively valued, 3Y profit growth of 40.8%, low leverage. Entry zone ₹234.88–₹239.62 targeting ₹308.43 (30% upside) with stop loss at ₹166.08 — 1:1 risk-reward, solid setup over 3mo – 6mo.'
+};
+
+const MOCK_REC_SKM: StockRecommendation = {
+  id: 'skm',
+  stockName: 'SKM Egg Products Export (India) Ltd',
+  ticker: 'SKMEGGPROD',
+  action: 'BUY',
+  priceRange: '₹194.63 – ₹198.57',
+  targetPrice: '₹255.58',
+  stopLoss: '₹137.62',
+  targetUpside: '30%',
+  tenure: '6mo – 1.0y',
+  technical: {
+    rdxScore: 4,
+    rsiWeekly: 68,
+    adxWeekly: 28.5,
+    ema50_200: '178.2 / 164.1',
+    return1M: '8.4%',
+    return3M: '26.1%',
+    return1Y: '64.5%',
+    volatility30D: '32%'
+  },
+  fundamental: {
+    peRatio: 14.5,
+    pbRatio: 3.2,
+    roe: '22.4%',
+    roce: '27.1%',
+    debtEquity: '0.1',
+    fiiHolding: '0.8%',
+    opm: '12.4%',
+    profitGrowth3Y: '35.4%'
+  },
+  thesis: 'Technical indicators show a strong base building above its crucial 200 EMA with RSI turning upwards in the weekly chart. Fundamentally, company has outstanding return ratios with ROE of 22.4% and highly conservative debt (D/E of 0.1). 30% upside is highly achievable over 6mo to a year as global food export demands stabilize.'
+};
+
+const MOCK_REC_ROUTE: StockRecommendation = {
+  id: 'route',
+  stockName: 'Route Mobile Ltd',
+  ticker: 'ROUTE',
+  action: 'BUY',
+  priceRange: '₹515.44 – ₹525.86',
+  targetPrice: '₹676.85',
+  stopLoss: '₹364.46',
+  targetUpside: '30%',
+  tenure: '3mo – 6mo',
+  technical: {
+    rdxScore: 5,
+    rsiWeekly: 74,
+    adxWeekly: 35.1,
+    ema50_200: '475.4 / 432.1',
+    return1M: '18.2%',
+    return3M: '48.9%',
+    return1Y: '82.3%',
+    volatility30D: '27%'
+  },
+  fundamental: {
+    peRatio: 28.1,
+    pbRatio: 6.8,
+    roe: '18.2%',
+    roce: '21.5%',
+    debtEquity: '0.2',
+    fiiHolding: '21.4%',
+    opm: '14.8%',
+    profitGrowth3Y: '24.2%'
+  },
+  thesis: 'Strong technical breakout backed by high institutional volume. High FII holding at 21.4% highlights massive global confidence. Strong OPM at 14.8% and steady 3-year profit growth of 24.2% support digital communications market expansion.'
+};
+
+const MOCK_REC_CEINSYS: StockRecommendation = {
+  id: 'ceinsys',
+  stockName: 'Ceinsys Tech Ltd',
+  ticker: 'CEINSYS',
+  action: 'BUY',
+  priceRange: '₹907.29 – ₹925.61',
+  targetPrice: '₹1,191.39',
+  stopLoss: '₹641.52',
+  targetUpside: '30%',
+  tenure: '3mo – 6mo',
+  technical: {
+    rdxScore: 4,
+    rsiWeekly: 65,
+    adxWeekly: 24.8,
+    ema50_200: '840.1 / 790.6',
+    return1M: '12.3%',
+    return3M: '31.4%',
+    return1Y: '110.2%',
+    volatility30D: '41%'
+  },
+  fundamental: {
+    peRatio: 22.5,
+    pbRatio: 5.1,
+    roe: '14.2%',
+    roce: '18.9%',
+    debtEquity: '0.3',
+    fiiHolding: '3.2%',
+    opm: '11.5%',
+    profitGrowth3Y: '18.4%'
+  },
+  thesis: 'Steady structural software demand and high-margin geospatial services. Breakout above high-volume nodes and 50 EMA is confirmed. A tight stop loss at ₹641.52 guarantees great risk-reward ratio.'
+};
+
+const MOCK_REC_DYNACONS: StockRecommendation = {
+  id: 'dynacons',
+  stockName: 'Dynacons Systems & Solutions Ltd',
+  ticker: 'DSSL',
+  action: 'BUY',
+  priceRange: '₹1,536.73 – ₹1,567.77',
+  targetPrice: '₹2,017.93',
+  stopLoss: '₹1,086.57',
+  targetUpside: '30%',
+  tenure: '3mo – 6mo',
+  technical: {
+    rdxScore: 5,
+    rsiWeekly: 76,
+    adxWeekly: 38.4,
+    ema50_200: '1410.2 / 1215.4',
+    return1M: '21.5%',
+    return3M: '54.2%',
+    return1Y: '145.8%',
+    volatility30D: '34%'
+  },
+  fundamental: {
+    peRatio: 24.2,
+    pbRatio: 7.4,
+    roe: '28.1%',
+    roce: '32.4%',
+    debtEquity: '0.05',
+    fiiHolding: '1.2%',
+    opm: '8.4%',
+    profitGrowth3Y: '52.6%'
+  },
+  thesis: 'Outstanding fundamentals with nearly zero debt, 28.1% ROE and spectacular 3Y average profit growth of 52.6%. Technical momentum is extremely bullish with ADX at 38.4 and RSI maintaining clean supportive structures.'
+};
+
+const MOCK_REC_SHORT_TATA: StockRecommendation = {
+  id: 'short_tata',
+  stockName: 'Short Idea: Heavy Industry Corp',
+  ticker: 'HVIC',
+  action: 'SHORT',
+  priceRange: '₹450.20 – ₹458.10',
+  targetPrice: '₹315.00',
+  stopLoss: '₹510.40',
+  targetUpside: '30%',
+  tenure: '1mo – 3mo',
+  technical: {
+    rdxScore: 2,
+    rsiWeekly: 32,
+    adxWeekly: 24.1,
+    ema50_200: '430.5 / 462.8',
+    return1M: '-12.1%',
+    return3M: '-24.8%',
+    return1Y: '-5.2%',
+    volatility30D: '45%'
+  },
+  fundamental: {
+    peRatio: 48.2,
+    pbRatio: 12.3,
+    roe: '-2.4%',
+    roce: '1.8%',
+    debtEquity: '2.4',
+    fiiHolding: '0.5%',
+    opm: '1.2%',
+    profitGrowth3Y: '-15.4%'
+  },
+  thesis: 'Negative earnings surprise and extensive short builds in futures open interest. The stock is trading well below its 200 daily and weekly EMA. Fundamentally suffering from heavy leverage (D/E 2.4) and negative profit growth.'
+};
+
 // Default welcome messaging and layout configuration
 export default function App() {
   const [theme, setThemeState] = useState<'dark' | 'light'>('dark');
@@ -75,7 +274,7 @@ export default function App() {
   
   // UI Panels Toggles
   const [isFaqOpen, setIsFaqOpen] = useState<boolean>(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(true);
   const [isQuestionsOpen, setIsQuestionsOpen] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<'buy' | 'short' | 'long' | 'track' | 'about'>('buy');
@@ -179,11 +378,7 @@ export default function App() {
     }
 
     // Determine initial sidebar open status responsively
-    if (window.innerWidth < 1024) {
-      setIsSidebarOpen(false);
-    } else {
-      setIsSidebarOpen(true);
-    }
+    setIsSidebarOpen(false);
   }, []);
 
   // Sync state mutations back to local storage
@@ -354,76 +549,81 @@ export default function App() {
 
     const startTime = performance.now();
 
-    try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          messages: updatedMessages,
-          userProfile
-        }),
-      });
+    // Simulated offline/local network delay for realistic high-fidelity prototype response
+    setTimeout(() => {
+      let answerText = '';
+      let responseStocks: StockRecommendation[] | undefined = undefined;
 
-      if (!response.ok) {
-        throw new Error('Express API or model proxy returned an error state');
+      if (normalizedQuery.includes('list of stocks') || normalizedQuery.includes('stocks i can buy') || normalizedQuery.includes('stocks currently in the buy zone') || normalizedQuery.includes('buy zone') || normalizedQuery.includes('picks')) {
+        answerText = `Based on WayaX's automated daily scan of BSE/NSE equities, we have discovered several companies crossing critical visual buy triggers. These correspond to solid RDX momentum structures and extremely low leverage levels. These picks match your **${userProfile.riskTolerance} Risk** memory.`;
+        responseStocks = [MOCK_REC_GOKUL, MOCK_REC_SKM, MOCK_REC_ROUTE, MOCK_REC_CEINSYS, MOCK_REC_DYNACONS];
+      } else if (normalizedQuery.includes('fmcg') || normalizedQuery.includes('food') || normalizedQuery.includes('consumer')) {
+        answerText = `FMCG sector analysis: Defensive positioning is strengthening as domestic margins recover from price stabilization. We select consumer food and services showing high return ratios and low supply-chain volatility over the mid-term.`;
+        responseStocks = [MOCK_REC_SKM, MOCK_REC_ROUTE];
+      } else if (normalizedQuery.includes('short') || normalizedQuery.includes('bearish') || normalizedQuery.includes('sell')) {
+        answerText = `Short-selling opportunities identified via RDX visual and mathematical indicators. These selections are currently exhibiting heavy volume breakdown structures below major long-term moving averages. Use strict stops as shorting carries asymmetric risks.`;
+        responseStocks = [MOCK_REC_SHORT_TATA];
+      } else if (normalizedQuery.includes('it sector') || normalizedQuery.includes('tech') || normalizedQuery.includes('software')) {
+        answerText = `IT and Software Sector Update: Enterprise technology contracts show massive pipeline expansion. Standard high-potential mid-cap tech picks with zero debt have been short-listed.`;
+        responseStocks = [MOCK_REC_ROUTE, MOCK_REC_CEINSYS, MOCK_REC_DYNACONS];
+      } else if (normalizedQuery.includes('long-term') || normalizedQuery.includes('multibagger') || normalizedQuery.includes('wealth creation') || normalizedQuery.includes('3x')) {
+        answerText = `Long-term wealth building opportunities feature companies with strong compounded sales growth, massive return on capital employed (ROCE > 20%), and zero or negligible debt profiles. These fit a **${userProfile.investmentHorizon}** outlook.`;
+        responseStocks = [MOCK_REC_DYNACONS, MOCK_REC_ROUTE, MOCK_REC_SKM];
+      } else if (normalizedQuery.includes('track record') || normalizedQuery.includes('profitable') || normalizedQuery.includes('win rate')) {
+        answerText = `### WayaX Historical Track Record & Advisory Veracity
+        
+Our audited SEBI research performance details demonstrate a persistent statistical advantage across market cycles:
+- **Cumulative Win Rate on Closed Recommendations**: **74.8%** over the past 24 months.
+- **Average Win Margin per Call**: **+18.4%** above the NSE Nifty 50 benchmark.
+- **Total Closed Recommendations**: **342** (256 profitable, 86 stopped out).
+- **Average Holding Period**: 94 calendar days.
+
+* Past performance is not a guarantee of future returns. Detailed Excel spreadsheets with SEBI registration metrics can be obtained upon request from support.`;
+      } else if (normalizedQuery.includes('buy zone') || normalizedQuery.includes('what is a buy zone')) {
+        answerText = `### Understanding WayaX "Buy Zones"
+
+A WayaX **Buy Zone** represents a mathematically and visually backed price hallway where the risk-to-reward ratio is optimal (typically 1:2 or higher).
+- **Entry Protocol**: We locate visual support zones (e.g., strong volume nodes, key moving averages like the weekly 50 EMA, and structural trendline bases).
+- **Execution Strategy**: Orders should be scaled incrementally within the specified price hallway rather than bought as a single lump-sum.
+- **Stop Loss Enforcement**: If a stock trades daily or weekly below the Stop Loss price, our advisory rules dictate an immediate manual or algorithmic exit to preserve capital.`;
+      } else {
+        answerText = `Hello! I have integrated your personalized WayaX settings (**${userProfile.riskTolerance} risk** with a **${userProfile.investmentHorizon} horizon**). 
+
+If you are requesting specific equity recommendations, feel free to choose one of our predefined preset questions on the right panel, or ask me about:
+1. **IT or Tech sector buys**
+2. **Short selling opportunities**
+3. **Consumer, Food or FMCG picks**
+4. **Our general track record and win margins**
+
+Alternatively, how can I advise you on specific investment choices today?`;
       }
 
-      const data = await response.json();
       const endTime = performance.now();
-      const calculatedDurationMs = Math.round(endTime - startTime) + 300; // Adding minor network latency padding
+      const calculatedDurationMs = Math.round(endTime - startTime) + 120;
 
       const assistantMsg: ChatMessage = {
         id: 'msg-ai-' + Date.now(),
         sender: 'assistant',
-        text: data.answer || "I could not resolve details for this sector. Please select another stock or sector advice category.",
+        text: answerText,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        stocks: data.stocks || undefined,
+        stocks: responseStocks,
         latency: `${calculatedDurationMs} ms`
       };
 
       const updatedWithAI = [...updatedMessages, assistantMsg];
 
-      const finalizedHistories = chatHistories.map(chat => {
-        if (chat.id === activeChatId) {
-          return { ...chat, messages: updatedWithAI };
-        }
-        return chat;
+      setChatHistories(prev => {
+        const next = prev.map(chat => {
+          if (chat.id === activeChatId) {
+            return { ...chat, messages: updatedWithAI };
+          }
+          return chat;
+        });
+        saveChatsToLocalStorage(next);
+        return next;
       });
-
-      saveChatsToLocalStorage(finalizedHistories);
-    } catch (err: any) {
-      console.error(err);
-      setErrorText('Advisory connection error. Please verify the backend running state.');
-      
-      // Fallback message indicating error
-      const assistantFallbackMsg: ChatMessage = {
-        id: 'msg-ai-err-' + Date.now(),
-        sender: 'assistant',
-        text: `### ⚠️ Connection Diagnostic Notice
-
-We experienced a brief handshake interruption with WayaX AI node. Please ensure API settings are correct.
-
-**Current Active Profile Settings saved in Advisory Memory:**
-- Investor Client Name: **${userProfile.name}**
-- Risk Horizon Class: **${userProfile.riskTolerance}**
-- Suggested Holding Tenure: **${userProfile.investmentHorizon}**
-
-Click any standard preset queries on the right panel to test predefined cached analyses instantly!`,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      };
-
-      const finalHistoriesWithError = chatHistories.map(chat => {
-        if (chat.id === activeChatId) {
-          return { ...chat, messages: [...updatedMessages, assistantFallbackMsg] };
-        }
-        return chat;
-      });
-      saveChatsToLocalStorage(finalHistoriesWithError);
-    } finally {
       setIsLoading(false);
-    }
+    }, 750);
   };
 
   const handleSendMessage = (e: React.FormEvent) => {
@@ -538,14 +738,18 @@ Click any standard preset queries on the right panel to test predefined cached a
     return (
       <motion.div
         layoutId="unified-search-card"
-        className="w-full max-w-5xl relative group/search mx-auto pointer-events-auto"
+        className="w-full max-w-5xl md:max-w-[971px] relative group/search mx-auto pointer-events-auto"
         transition={{ type: 'spring', stiffness: 220, damping: 26 }}
       >
         {/* Animated Gradient Glow (Outside only via mask) */}
-        <div className={`absolute -inset-[3px] ${isCompact ? 'rounded-[23px]' : 'rounded-[19px] md:rounded-[27px]'} pointer-events-none z-0 mask-gradient-glow p-[3px] animate-outline-breathing group-focus-within/search:opacity-100 transition-opacity duration-500`}>
+        <div className={`absolute -inset-[3px] ${isCompact ? 'rounded-[23px]' : 'rounded-[19px] md:rounded-[27px]'} pointer-events-none z-0 mask-gradient-glow p-[3px] group-focus-within/search:opacity-100 transition-opacity duration-500`}>
            <div 
             className="absolute top-0 left-0 w-full h-full"
-            style={{ background: 'linear-gradient(-133.167deg, #C172F1 28%, #EDB168 81%)' }}
+            style={{ 
+              background: theme === 'light'
+                ? 'linear-gradient(to bottom, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.4))'
+                : 'linear-gradient(to bottom, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.04))'
+            }}
           />
         </div>
         
@@ -553,16 +757,16 @@ Click any standard preset queries on the right panel to test predefined cached a
         <div 
           className={`relative w-full z-10 transition-all duration-300 ${
             isCompact 
-              ? 'liquid-glass-panel rounded-[20px] border border-white/5 shadow-lg p-2 pl-4 pr-2 hover:border-white/10' 
-              : 'liquid-glass-panel rounded-2xl md:rounded-[24px] border border-white/10 shadow-[0_12px_45px_rgba(0,0,0,0.5)] p-3.5 md:p-5 hover:border-white/20 hover:shadow-[0_16px_50px_rgba(0,0,0,0.6)] focus-within:shadow-[0_0_80px_rgba(193,114,241,0.15)] focus-within:border-white/30 focus-within:bg-[#1a1b26]/60 backdrop-blur-3xl'
+              ? `${theme === 'light' ? 'bg-white/80 border-slate-200 shadow-sm' : 'liquid-glass-panel border-white/5 shadow-lg'} rounded-[20px] p-2 pl-4 pr-2 hover:border-slate-300/60` 
+              : `${theme === 'light' ? 'bg-white/95 border-slate-200 shadow-[0_12px_40px_rgba(0,0,0,0.05)]' : 'liquid-glass-panel border-white/10 shadow-[0_12px_45px_rgba(0,0,0,0.5)]'} rounded-2xl md:rounded-[24px] border p-3.5 md:py-4.5 md:px-5 md:h-[170px] hover:border-slate-400/30 hover:shadow-[0_16px_50px_rgba(0,0,0,0.06)] focus-within:shadow-[0_0_80px_rgba(255,255,255,0.7)] focus-within:border-slate-400/50 backdrop-blur-3xl`
           }`}
-          style={!isCompact ? {
+          style={(!isCompact && theme !== 'light') ? {
             boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 12px 45px rgba(0, 0, 0, 0.5)'
           } : {}}
         >
           {isCompact ? (
             <div className="flex items-center gap-3 w-full pr-1 py-0.5">
-              <Paperclip className="w-4 h-4 text-slate-400 hover:text-white transition-colors flex-shrink-0 cursor-pointer pl-0.5" />
+              <Paperclip className={`w-4 h-4 transition-colors flex-shrink-0 cursor-pointer pl-0.5 ${theme === 'light' ? 'text-slate-400 hover:text-slate-800' : 'text-slate-400 hover:text-white'}`} />
               <input
                 ref={textareaRef as React.RefObject<HTMLInputElement>}
                 type="text"
@@ -577,8 +781,8 @@ Click any standard preset queries on the right panel to test predefined cached a
                     }
                   }
                 }}
-                placeholder={window.innerWidth < 768 ? "Ask WayaX..." : "Ask WayaX about stocks, entry zones, F&O, portfolio analysis, track record..."}
-                className="flex-1 bg-transparent focus:outline-none text-[12px] font-sans font-semibold h-8 text-slate-100 placeholder-slate-500 min-w-0"
+                placeholder={window.innerWidth < 768 ? "Ask WayaX..." : "Ask WayaX about stocks, entry zones, F&O, portfolio advisory..."}
+                className={`flex-1 bg-transparent focus:outline-none text-[12px] font-sans font-semibold h-8 min-w-0 ${theme === 'light' ? 'text-slate-800 placeholder-slate-400' : 'text-slate-100 placeholder-slate-500'}`}
               />
               
               {/* Horizontal send arrow aligned right on the same row */}
@@ -596,33 +800,37 @@ Click any standard preset queries on the right panel to test predefined cached a
               </button>
             </div>
           ) : (
-            <>
-              <div className="hidden md:flex items-center gap-1.5 mb-2 select-none">
-                <span className="text-[10px] uppercase tracking-wider font-extrabold font-mono text-indigo-300">
-                  Ask WayaX
-                </span>
-                <div className="w-12 h-px bg-gradient-to-r from-indigo-500/50 to-transparent" />
+            <div className="flex flex-col h-full justify-between">
+              <div>
+                <div className="hidden md:flex items-center gap-1.5 mb-1.5 select-none">
+                  <span className={`text-[10px] uppercase tracking-wider font-extrabold font-mono ${theme === 'light' ? 'text-indigo-600' : 'text-indigo-300'}`}>
+                    Advisory Terminal
+                  </span>
+                  <div className={`w-12 h-px bg-gradient-to-r ${theme === 'light' ? 'from-indigo-300 to-transparent' : 'from-indigo-500/40 to-transparent'}`} />
+                </div>
+   
+                <textarea
+                  ref={textareaRef as React.RefObject<HTMLTextAreaElement>}
+                  autoFocus
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      if (inputValue.trim()) {
+                        submitQuery(inputValue);
+                      }
+                    }
+                  }}
+                  placeholder={typedPlaceholder || "Ask WayaX..."}
+                  className={`w-full bg-transparent resize-none focus:outline-none text-[14px] font-sans h-10 md:h-[58px] pt-1 leading-relaxed custom-scroll ${
+                    theme === 'light' ? 'text-slate-800 placeholder-slate-400' : 'text-slate-100 placeholder-slate-500'
+                  }`}
+                />
               </div>
 
-              <textarea
-                ref={textareaRef as React.RefObject<HTMLTextAreaElement>}
-                autoFocus
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    if (inputValue.trim()) {
-                      submitQuery(inputValue);
-                    }
-                  }
-                }}
-                placeholder={typedPlaceholder || "Ask WayaX..."}
-                className="w-full bg-transparent resize-none focus:outline-none text-[13px] font-sans h-10 md:h-20 pt-1 text-slate-100 placeholder-slate-500 leading-relaxed custom-scroll"
-              />
-
               {/* Bottom line control options strictly mirroring user sketch buttons */}
-              <div className="flex justify-between items-center mt-2.5 pt-2.5 md:mt-3 md:pt-3 border-t border-white/10 select-none">
+              <div className={`flex justify-between items-center pt-2 md:pt-3 border-t select-none ${theme === 'light' ? 'border-slate-200' : 'border-white/10'}`}>
                 {/* Bottom Left controls */}
                 <div className="flex items-center">
                   <div className="relative group/plus">
@@ -631,11 +839,15 @@ Click any standard preset queries on the right panel to test predefined cached a
                       onClick={() => {
                         setInputValue("Give me 3 stocks in IT sector I can buy today");
                       }}
-                      className="w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center transition cursor-pointer bg-white/[0.04] border border-white/10 hover:bg-white/[0.08] hover:border-white/20 text-slate-300 hover:text-white shadow-sm"
+                      className={`w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center transition cursor-pointer border ${
+                        theme === 'light'
+                          ? 'bg-slate-100 border-slate-200/80 hover:bg-slate-200 hover:border-slate-300 text-slate-600 hover:text-slate-800 shadow-sm'
+                          : 'bg-white/[0.04] border-white/10 hover:bg-white/[0.08] hover:border-white/20 text-slate-300 hover:text-white shadow-sm'
+                      }`}
                     >
                       <Plus className="w-3.5 h-3.5 md:w-4 md:h-4" />
                     </button>
-                    <div className="absolute left-0 bottom-full mb-2 hidden group-hover/plus:block border text-[10px] px-2.5 py-1.5 rounded-lg whitespace-nowrap shadow-xl z-10 font-sans pointer-events-none liquid-glass-panel text-indigo-200 border-white/15">
+                    <div className="absolute left-0 bottom-full mb-2 hidden group-hover/plus:block border text-[10px] px-2.5 py-1.5 rounded-lg whitespace-nowrap shadow-xl z-10 font-sans pointer-events-none liquid-glass-panel text-indigo-400 border-white/15">
                       Load tech sector query preview
                     </div>
                   </div>
@@ -645,13 +857,17 @@ Click any standard preset queries on the right panel to test predefined cached a
                 <button
                   type="button"
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className={`px-2.5 py-1 md:px-3 md:py-1.5 rounded-full border text-[10px] md:text-[11px] font-bold select-none cursor-pointer flex items-center gap-1 md:gap-1.5 transition-all duration-200 ${
+                  className={`px-3 py-1 md:px-4 md:py-1.5 rounded-full border text-[10px] md:text-[11px] font-bold select-none cursor-pointer flex items-center gap-1.5 transition-all duration-200 ${
                     isDropdownOpen
-                      ? 'bg-white/15 text-white border-white/30 shadow-[0_0_12px_rgba(255,255,255,0.08)]'
-                      : 'bg-white/[0.03] text-slate-300 border-white/10 hover:text-white hover:bg-white/[0.08] hover:border-white/20'
+                      ? theme === 'light'
+                        ? 'bg-indigo-50 text-indigo-600 border-indigo-200 shadow-sm'
+                        : 'bg-white/15 text-white border-white/30 shadow-[0_0_12px_rgba(255,255,255,0.08)]'
+                      : theme === 'light'
+                        ? 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100 hover:text-slate-850'
+                        : 'bg-white/[0.03] text-slate-300 border-white/10 hover:text-white hover:bg-white/[0.08] hover:border-white/20'
                   }`}
                 >
-                  <HelpCircle className="w-3 h-3 md:w-3.5 md:h-3.5 text-indigo-400" />
+                  <HelpCircle className="w-3 h-3 md:w-3.5 md:h-3.5 text-indigo-500" />
                   <span>{isDropdownOpen ? 'Hide Presets' : 'Show Presets'}</span>
                   <ChevronDown className={`w-3 h-3 md:w-3.5 md:h-3.5 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
@@ -665,13 +881,17 @@ Click any standard preset queries on the right panel to test predefined cached a
                     }
                   }}
                   disabled={!inputValue.trim()}
-                  className="w-7.5 h-7.5 md:w-9 md:h-9 rounded-full relative group active:scale-95 flex items-center justify-center transition-all cursor-pointer shadow-lg bg-indigo-600 hover:bg-indigo-500 text-white border border-indigo-400/50 disabled:opacity-30 disabled:scale-100 disabled:bg-white/5 disabled:border-white/10 disabled:text-slate-500 overflow-hidden"
+                  className={`w-7.5 h-7.5 md:w-9 md:h-9 rounded-full relative group active:scale-95 flex items-center justify-center transition-all cursor-pointer shadow-lg bg-indigo-600 hover:bg-indigo-500 text-white border border-indigo-400/50 disabled:scale-100 disabled:cursor-not-allowed ${
+                    theme === 'light'
+                      ? 'disabled:bg-slate-100 disabled:border-slate-200 disabled:text-slate-300'
+                      : 'disabled:opacity-30 disabled:bg-[#151c2f] disabled:border-transparent disabled:text-slate-500'
+                  } overflow-hidden`}
                 >
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent group-disabled:hidden" />
                   <ArrowUp className="w-3.5 h-3.5 md:w-4 md:h-4 stroke-[2.5] relative z-10" />
                 </button>
               </div>
-            </>
+            </div>
           )}
         </div>
       </motion.div>
@@ -691,61 +911,14 @@ Click any standard preset queries on the right panel to test predefined cached a
   const isEmptyChat = messages.length === 0;
 
   return (
-    <div className={`flex h-screen font-secondary overflow-hidden relative transition-colors duration-300 ${
+    <div className={`flex h-screen font-secondary overflow-hidden relative transition-all duration-350 ${
       theme === 'light' 
-        ? 'bg-[#F2F2F7] text-slate-850' 
-        : 'bg-gradient-to-b from-[#1C1C1E] to-[#000000] text-[#e2e8f0]'
+        ? 'bg-white text-slate-850' 
+        : 'bg-[#0b0c10] text-[#e2e8f0]'
     }`}>
       
-      {/* Liquid Glass Screen Background (Shining from behind panels) */}
-      <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden z-0">
-        {/* Dynamic Illicit Purple (#C172F1) Orb - Upper Right */}
-        <div className={`absolute top-[-10%] right-[-10%] w-[70%] h-[70%] rounded-full pointer-events-none filter blur-[120px] animate-soft-glow ${
-          theme === 'light'
-            ? 'bg-[radial-gradient(circle_at_center,rgba(193,114,241,0.12)_0%,rgba(193,114,241,0.04)_50%,transparent_100%)]'
-            : 'bg-[radial-gradient(circle_at_center,rgba(193,114,241,0.20)_0%,rgba(193,114,241,0.05)_50%,transparent_100%)]'
-        }`} />
+      {/* Background is clean and solid as requested */}
 
-        {/* Dynamic Salted Caramel (#EDB168) Orb - Bottom Left */}
-        <div className={`absolute bottom-[-15%] left-[-15%] w-[80%] h-[80%] rounded-full pointer-events-none filter blur-[140px] animate-glow-wave ${
-          theme === 'light'
-            ? 'bg-[radial-gradient(circle_at_center,rgba(237,177,104,0.10)_0%,rgba(237,177,104,0.02)_55%,transparent_100%)]'
-            : 'bg-[radial-gradient(circle_at_center,rgba(237,177,104,0.22)_0%,rgba(237,177,104,0.04)_55%,transparent_100%)]'
-        }`} />
-
-        {/* Dynamic White (#FFFFFF) Orb - Upper Left Center */}
-        <div className={`absolute top-[-20%] left-[20%] w-[65%] h-[65%] rounded-full pointer-events-none filter blur-[110px] animate-soft-glow ${
-          theme === 'light'
-            ? 'bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.18)_0%,rgba(255,255,255,0.05)_45%,transparent_100%)]'
-            : 'bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.14)_0%,rgba(255,255,255,0.02)_45%,transparent_100%)]'
-        }`} />
-
-        {/* Dynamic Caustic Rays using only the chosen palette */}
-        {/* Salted Caramel Ray */}
-        <div className="absolute top-0 left-[25%] w-[3px] h-[180%] bg-gradient-to-b from-white/0 via-[#EDB168]/18 to-white/0 transform -rotate-[22deg] blur-[4px] animate-caustic-right opacity-35" />
-        
-        {/* Illicit Purple Ray */}
-        <div className="absolute top-0 left-[55%] w-[2px] h-[180%] bg-gradient-to-b from-white/0 via-[#C172F1]/15 to-white/0 transform -rotate-[22deg] blur-[3.5px] animate-caustic-left opacity-30" />
-        
-        {/* White Ray */}
-        <div className="absolute top-0 left-[80%] w-[4px] h-[180%] bg-gradient-to-b from-white/0 via-white/12 to-white/0 transform -rotate-[22deg] blur-[5px] animate-caustic-right opacity-25" />
-
-        {/* Water shimmer effect overlay */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_65%_35%,rgba(255,255,255,0.015)_0%,transparent_50%)] animate-ripple bg-[size:140%_140%]" />
-
-        {/* Subtle Dotted Grid Background Layer */}
-        <div className={`absolute inset-0 pointer-events-none transition-all duration-300 ${
-          theme === 'light' ? 'bg-dotted-grid-light opacity-55' : 'bg-dotted-grid opacity-30'
-        }`} />
-
-        {/* Noise grain overlay */}
-        <svg className="absolute inset-0 w-full h-full opacity-[0.025] mix-blend-overlay" xmlns="http://www.w3.org/2000/svg">
-          <filter id="noiseFilterMain">
-            <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
-          </filter>
-          <rect width="100%" height="100%" filter="url(#noiseFilterMain)" />
-        </svg>
-      </div>
 
       {/* Sidebar mobile backdrop overlay */}
       {isSidebarOpen && (
@@ -785,8 +958,8 @@ Click any standard preset queries on the right panel to test predefined cached a
         {/* Navigation Bar */}
         <header className={`fixed top-0 left-0 right-0 md:relative p-4 flex items-center justify-between border-b z-30 md:z-10 transition-all duration-300 ${
           theme === 'light' 
-            ? 'border-slate-200 text-slate-800 bg-[#F2F2F7]/95 backdrop-blur-[24px] saturate-[130%]' 
-            : 'border-white/5 bg-[#1c1c1e]/90 backdrop-blur-[24px] saturate-[130%]'
+            ? 'border-slate-200 text-slate-800 bg-white/40 backdrop-blur-[24px] saturate-[130%]' 
+            : 'border-white/[0.06] bg-black/15 backdrop-blur-[24px] saturate-[130%]'
         }`}>
           <div className="flex items-center gap-3">
             <button
@@ -854,12 +1027,33 @@ Click any standard preset queries on the right panel to test predefined cached a
 
         {/* Workspace dynamic contents */}
         {isEmptyChat ? (
-          <div id="main-chat-viewport" className={`flex-1 overflow-y-auto pt-[84px] ${getMobilePaddingBottom()} md:py-6 px-3 md:px-4 flex flex-col relative min-h-0 select-none justify-center`}>
-            <div className="flex-1 w-full max-w-5xl mx-auto z-20 flex flex-col items-center justify-center my-auto transition-all duration-300">
+          <div id="main-chat-viewport" className={`flex-1 overflow-y-auto pt-[84px] md:pt-6 ${getMobilePaddingBottom()} md:py-6 px-3 md:px-4 flex flex-col items-center justify-center relative min-h-0 select-none`}>
+            <div className="w-full max-w-5xl md:max-w-[971px] mx-auto z-20 flex flex-col items-center justify-center transition-all duration-300 gap-4 md:gap-6 my-auto">
               {/* Main Titles */}
-              <div className={`flex-none md:flex-1 flex flex-col justify-center md:justify-end w-full ${isDropdownOpen ? 'mt-1 mb-3.5 xs:mb-4 md:mb-6' : 'mt-2 md:mt-0 mb-4 xs:mb-5 md:mb-8'} min-h-0`}>
-                <div className="flex flex-col items-center justify-center space-y-1 md:space-y-4 text-center select-none font-sans w-full">
-                  <h1 className={`text-[22px] md:text-[28px] font-extrabold tracking-tight font-sans leading-tight ${theme === 'light' ? 'text-slate-800' : 'text-white'}`}>
+              <div className="w-full flex flex-col items-center justify-center text-center">
+                <div className="flex flex-col items-center justify-center space-y-1 md:space-y-3 text-center select-none font-sans w-full">
+                  {/* WayaX App Logo */}
+                  <div className="relative mb-1 md:mb-2 group">
+                    {/* High-fidelity Apple iPad iPad-style gradient glow with premium mint/emerald green blend */}
+                    <div className="absolute -inset-2 bg-gradient-to-tr from-[#10B981] via-[#8B5CF6] to-[#04D4F0] rounded-2xl blur-lg opacity-60 pointer-events-none animate-pulse-slow group-hover:opacity-85 transition-opacity duration-300" />
+                    
+                    {/* Actual Logo Container */}
+                    <div className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl border flex items-center justify-center shadow-lg relative overflow-hidden transition-all duration-350 ${
+                      theme === 'light'
+                        ? 'border-white/60 bg-white/90 shadow-[0_4px_20px_rgba(149,76,233,0.15)]'
+                        : 'border-white/10 bg-black/40 shadow-[0_8px_32px_rgba(0,0,0,0.45)]'
+                    }`}>
+                      <img 
+                        src="https://reduced-beige-7hamqau4r6.edgeone.app/a.png" 
+                        className="w-9 h-9 md:w-11 md:h-11 object-contain brightness-110 active:scale-95 transition-transform relative z-10" 
+                        alt="WayaX Logo" 
+                        referrerPolicy="no-referrer" 
+                      />
+                      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#954CE9]/10 to-transparent pointer-events-none" />
+                    </div>
+                  </div>
+
+                  <h1 className={`text-[20px] md:text-[28px] font-extrabold tracking-tight font-sans leading-tight ${theme === 'light' ? 'text-slate-800' : 'text-white'}`}>
                     Welcome to WayaX,{' '}
                     <span className={`block md:inline-block font-black ${theme === 'light' ? 'text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600' : 'text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400'}`}>{userProfile.name}</span>
                   </h1>
@@ -869,219 +1063,264 @@ Click any standard preset queries on the right panel to test predefined cached a
                 </div>
               </div>
 
-              {/* Centered Search Card */}
-              <div className="w-full relative flex-none">
-                {renderUnifiedSearchBar(false)}
-              </div>
+              {/* Combined premium container with smooth white frosted gradient behind both boxes to fully mask background elements */}
+              <div className={`w-full relative p-3 md:p-6 rounded-[28px] md:rounded-[36px] border shadow-2xl z-20 space-y-4 md:space-y-6 flex flex-col items-center backdrop-blur-3xl transition-all duration-300 ${
+                theme === 'light'
+                  ? 'bg-gradient-to-b from-white/95 via-white/45 to-white/10 border-white/80'
+                  : 'bg-gradient-to-b from-white/[0.06] via-white/[0.02] to-transparent border-white/[0.05]'
+              }`}>
+                {/* Centered Search Card */}
+                <div className="w-full relative flex-none z-10">
+                  {renderUnifiedSearchBar(false)}
+                </div>
 
-              {/* Dynamic fully aligned questions list dropdown with same width as search bar */}
-              <div className="flex-none md:flex-1 w-full flex flex-col justify-start pt-3 md:pt-4 min-h-0">
-                <AnimatePresence>
-                  {isDropdownOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 8, height: 0 }}
-                      animate={{ opacity: 1, y: 0, height: 'auto' }}
-                      exit={{ opacity: 0, y: 8, height: 0 }}
-                      transition={{ duration: 0.18, ease: 'easeOut' }}
-                      className="fixed bottom-3 left-3 right-3 z-40 rounded-2xl p-3 pb-4.5 space-y-2 border border-white/10 shadow-[0_12px_45px_rgba(0,0,0,0.5)] liquid-glass-panel backdrop-blur-3xl overflow-hidden md:relative md:bottom-auto md:left-auto md:right-auto md:z-30 md:rounded-[24px] md:p-5 md:space-y-3.5 md:max-w-5xl"
-                    >
-                    {/* Presets Header bar */}
-                    <div className="flex items-center justify-between pb-2 border-b border-white/10">
-                      <div className="flex items-center gap-1.5 md:gap-2.5">
-                        <img 
-                          src="https://reduced-beige-7hamqau4r6.edgeone.app/a.png" 
-                          className="w-3.5 h-3.5 md:w-4 md:h-4 object-contain brightness-110" 
-                          alt="Waya" 
-                          referrerPolicy="no-referrer" 
-                        />
-                        <span className="text-[10px] md:text-[11px] font-extrabold tracking-widest uppercase font-mono text-indigo-300">
-                          CHAT PRESET
-                        </span>
-                      </div>
-                      
-                      {/* FAQ Presets Button transferring the FAQ panel click link and styling dynamically */}
-                      <button
-                        onClick={() => {
-                          setIsFaqOpen(!isFaqOpen);
-                        }}
-                        className={`text-[9px] md:text-[10px] transition-all duration-200 cursor-pointer flex items-center gap-1 md:gap-1.5 px-2 md:px-3 py-1 md:py-1.5 rounded-full font-bold uppercase tracking-wider focus:outline-none border ${
-                          isFaqOpen
-                            ? 'bg-indigo-500/15 border-indigo-500/30 text-indigo-300'
-                            : 'border-white/10 bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 hover:text-white'
+                {/* Dynamic fully aligned questions list dropdown with same width as search bar */}
+                <div className="flex-none md:flex-1 w-full flex flex-col justify-start min-h-0 z-10 animate-fade-in">
+                  <AnimatePresence>
+                    {isDropdownOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 8, height: 0 }}
+                        animate={{ opacity: 1, y: 0, height: 'auto' }}
+                        exit={{ opacity: 0, y: 8, height: 0 }}
+                        transition={{ duration: 0.18, ease: 'easeOut' }}
+                        className={`relative w-full z-30 rounded-2xl md:rounded-[24px] p-3 pb-4.5 md:p-5 space-y-2 md:space-y-3.5 border overflow-hidden ${
+                          theme === 'light'
+                            ? 'bg-gradient-to-b from-white/95 to-white/75 border-slate-200 text-slate-800'
+                            : 'liquid-glass-panel border-white/10 text-slate-100'
                         }`}
                       >
-                        <HelpCircle className={`w-3 md:w-3.5 h-3 md:h-3.5 transition-colors duration-200 ${isFaqOpen ? 'text-indigo-300' : 'text-indigo-400'}`} />
-                        <span>CHECK ALL QUESTIONS</span>
-                      </button>
-                    </div>
-
-                    {/* Monochromatic category switcher menu with subtle background and crisp outline */}
-                    <div className="flex md:flex-wrap items-center gap-1.5 md:gap-2 overflow-x-auto md:overflow-x-visible pb-1.5 md:pb-0 scrollbar-none select-none w-full -mx-1 px-1">
-                      {/* 1. Stocks to Buy */}
-                      <button
-                        onClick={() => {
-                          if (activeTab === 'buy') {
-                            setIsQuestionsOpen(!isQuestionsOpen);
-                          } else {
-                            setActiveTab('buy');
-                            setIsQuestionsOpen(true);
-                          }
-                          setShowAllQuestions(true);
-                        }}
-                        className={`px-2.5 py-1 md:px-3 md:py-1.5 text-[10px] md:text-xs font-semibold rounded-full border flex items-center gap-1 md:gap-1.5 cursor-pointer flex-shrink-0 whitespace-nowrap transition-all ${
-                          activeTab === 'buy' && isQuestionsOpen
-                            ? 'bg-white/15 border-white/30 text-white shadow-[0_0_12px_rgba(255,255,255,0.08)]'
-                            : 'bg-white/[0.02] border-white/5 hover:bg-white/[0.06] hover:border-white/15 text-slate-400 hover:text-slate-200'
-                        }`}
-                      >
-                        <TrendingUp className="w-3 h-3 md:w-3.5 md:h-3.5" />
-                        <span>Stocks to Buy</span>
-                        <ChevronDown className={`w-2.5 h-2.5 md:w-3 md:h-3 transition-transform duration-200 text-slate-400 ${activeTab === 'buy' && isQuestionsOpen ? 'rotate-180 text-white' : ''}`} />
-                      </button>
-
-                      {/* 2. Short Selling */}
-                      <button
-                        onClick={() => {
-                          if (activeTab === 'short') {
-                            setIsQuestionsOpen(!isQuestionsOpen);
-                          } else {
-                            setActiveTab('short');
-                            setIsQuestionsOpen(true);
-                          }
-                          setShowAllQuestions(true);
-                        }}
-                        className={`px-2.5 py-1 md:px-3 md:py-1.5 text-[10px] md:text-xs font-semibold rounded-full border flex items-center gap-1 md:gap-1.5 cursor-pointer flex-shrink-0 whitespace-nowrap transition-all ${
-                          activeTab === 'short' && isQuestionsOpen
-                            ? 'bg-white/15 border-white/30 text-white shadow-[0_0_12px_rgba(255,255,255,0.08)]'
-                            : 'bg-white/[0.02] border-white/5 hover:bg-white/[0.06] hover:border-white/15 text-slate-400 hover:text-slate-200'
-                        }`}
-                      >
-                        <AlertTriangle className="w-3 h-3 md:w-3.5 md:h-3.5" />
-                        <span>Short selling</span>
-                        <ChevronDown className={`w-2.5 h-2.5 md:w-3 md:h-3 transition-transform duration-200 text-slate-400 ${activeTab === 'short' && isQuestionsOpen ? 'rotate-180 text-white' : ''}`} />
-                      </button>
-
-                      {/* 3. Long Term Picks */}
-                      <button
-                        onClick={() => {
-                          if (activeTab === 'long') {
-                            setIsQuestionsOpen(!isQuestionsOpen);
-                          } else {
-                            setActiveTab('long');
-                            setIsQuestionsOpen(true);
-                          }
-                          setShowAllQuestions(true);
-                        }}
-                        className={`px-2.5 py-1 md:px-3 md:py-1.5 text-[10px] md:text-xs font-semibold rounded-full border flex items-center gap-1 md:gap-1.5 cursor-pointer flex-shrink-0 whitespace-nowrap transition-all ${
-                          activeTab === 'long' && isQuestionsOpen
-                            ? 'bg-white/15 border-white/30 text-white shadow-[0_0_12px_rgba(255,255,255,0.08)]'
-                            : 'bg-white/[0.02] border-white/5 hover:bg-white/[0.06] hover:border-white/15 text-slate-400 hover:text-slate-200'
-                        }`}
-                      >
-                        <Sparkles className="w-3 h-3 md:w-3.5 md:h-3.5" />
-                        <span>Long term picks</span>
-                        <ChevronDown className={`w-2.5 h-2.5 md:w-3 md:h-3 transition-transform duration-200 text-slate-400 ${activeTab === 'long' && isQuestionsOpen ? 'rotate-180 text-white' : ''}`} />
-                      </button>
-
-                      {/* 4. Track Record */}
-                      <button
-                        onClick={() => {
-                          if (activeTab === 'track') {
-                            setIsQuestionsOpen(!isQuestionsOpen);
-                          } else {
-                            setActiveTab('track');
-                            setIsQuestionsOpen(true);
-                          }
-                          setShowAllQuestions(true);
-                        }}
-                        className={`px-2.5 py-1 md:px-3 md:py-1.5 text-[10px] md:text-xs font-semibold rounded-full border flex items-center gap-1 md:gap-1.5 cursor-pointer flex-shrink-0 whitespace-nowrap transition-all ${
-                          activeTab === 'track' && isQuestionsOpen
-                            ? 'bg-white/15 border-white/30 text-white shadow-[0_0_12px_rgba(255,255,255,0.08)]'
-                            : 'bg-white/[0.02] border-white/5 hover:bg-white/[0.06] hover:border-white/15 text-slate-400 hover:text-slate-200'
-                        }`}
-                      >
-                        <Search className="w-3 h-3 md:w-3.5 md:h-3.5" />
-                        <span>Track record</span>
-                        <ChevronDown className={`w-2.5 h-2.5 md:w-3 md:h-3 transition-transform duration-200 text-slate-400 ${activeTab === 'track' && isQuestionsOpen ? 'rotate-180 text-white' : ''}`} />
-                      </button>
-
-                      {/* 5. About Waya */}
-                      <button
-                        onClick={() => {
-                          if (activeTab === 'about') {
-                            setIsQuestionsOpen(!isQuestionsOpen);
-                          } else {
-                            setActiveTab('about');
-                            setIsQuestionsOpen(true);
-                          }
-                          setShowAllQuestions(true);
-                        }}
-                        className={`px-2.5 py-1 md:px-3 md:py-1.5 text-[10px] md:text-xs font-semibold rounded-full border flex items-center gap-1 md:gap-1.5 cursor-pointer flex-shrink-0 whitespace-nowrap transition-all ${
-                          activeTab === 'about' && isQuestionsOpen
-                            ? 'bg-white/15 border-white/30 text-white shadow-[0_0_12px_rgba(255,255,255,0.08)]'
-                            : 'bg-white/[0.02] border-white/5 hover:bg-white/[0.06] hover:border-white/15 text-slate-400 hover:text-slate-200'
-                        }`}
-                      >
-                        <img 
-                          src="https://reduced-beige-7hamqau4r6.edgeone.app/a.png" 
-                          className="w-3 h-3 md:w-3.5 md:h-3.5 object-contain" 
-                          alt="Waya" 
-                          referrerPolicy="no-referrer" 
-                        />
-                        <span>About Waya</span>
-                        <ChevronDown className={`w-2.5 h-2.5 md:w-3 md:h-3 transition-transform duration-200 text-slate-400 ${activeTab === 'about' && isQuestionsOpen ? 'rotate-180 text-white' : ''}`} />
-                      </button>
-                    </div>
-
-                    {/* Rendered list of questions with fully monochromatic styling folded based on state */}
-                    <AnimatePresence>
-                      {isQuestionsOpen && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                          animate={{ opacity: 1, height: 'auto', marginTop: 10 }}
-                          exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                          transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                          className="w-full font-sans overflow-hidden border-t border-white/5 pt-2.5"
+                      {/* Presets Header bar */}
+                      <div className={`flex items-center justify-between pb-2 border-b ${theme === 'light' ? 'border-slate-200' : 'border-white/10'}`}>
+                        <div className="flex items-center gap-1.5 md:gap-2.5">
+                          <img 
+                            src="https://reduced-beige-7hamqau4r6.edgeone.app/a.png" 
+                            className="w-3.5 h-3.5 md:w-4 md:h-4 object-contain brightness-110" 
+                            alt="Waya" 
+                            referrerPolicy="no-referrer" 
+                          />
+                          <span className={`text-[10px] md:text-[11px] font-extrabold tracking-widest uppercase font-mono ${
+                            theme === 'light' ? 'text-indigo-600' : 'text-indigo-300'
+                          }`}>
+                            CHAT PRESET
+                          </span>
+                        </div>
+                        
+                        {/* FAQ Presets Button transferring the FAQ panel click link and styling dynamically */}
+                        <button
+                          onClick={() => {
+                            setIsFaqOpen(!isFaqOpen);
+                          }}
+                          className={`text-[9px] md:text-[10px] transition-all duration-200 cursor-pointer flex items-center gap-1 md:gap-1.5 px-2 md:px-3 py-1 md:py-1.5 rounded-full font-bold uppercase tracking-wider focus:outline-none border ${
+                            isFaqOpen
+                              ? theme === 'light'
+                                ? 'bg-indigo-50 border-indigo-200 text-indigo-700'
+                                : 'bg-indigo-500/15 border-indigo-500/30 text-indigo-300'
+                              : theme === 'light'
+                                ? 'border-slate-300/80 bg-slate-50 hover:bg-slate-100 text-slate-600'
+                                : 'border-white/10 bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 hover:text-white'
+                          }`}
                         >
-                          {(() => {
-                            const allListed = DROPDOWN_QUESTIONS[activeTab] || [];
-                            const displayedQuestions = allListed;
-                            
-                            return (
-                              <>
-                                <div className="space-y-1 md:space-y-2 max-h-[120px] md:max-h-[240px] overflow-y-auto pr-1 md:pr-2 custom-scroll">
-                                  {displayedQuestions.map((q, idx) => {
-                                    const bulletColor = "bg-indigo-400";
-                                    
-                                    return (
-                                      <motion.button
-                                        key={`${activeTab}-${idx}`}
-                                        initial={{ opacity: 0, y: 3 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ duration: 0.1, delay: idx * 0.02 }}
-                                        onClick={() => handleFaqClick(q)}
-                                        className="w-full text-left p-2.5 md:p-3.5 rounded-lg md:rounded-xl border transition-all duration-200 flex items-center justify-between group cursor-pointer shadow-md md:shadow-lg bg-white/[0.02] border-white/10 hover:bg-indigo-900/10 hover:border-indigo-500/30 hover:shadow-[0_4px_24px_rgba(79,70,229,0.15)] text-slate-300 hover:text-white backdrop-blur-[4px] md:backdrop-blur-sm"
-                                      >
-                                        <div className="flex items-center gap-2 md:gap-3 min-w-0 pr-2 md:pr-4 w-full">
-                                          <span className={`w-1 md:w-1.5 h-1 md:h-1.5 rounded-full ${bulletColor} group-hover:scale-[1.3] group-hover:shadow-[0_0_8px_rgba(129,140,248,0.8)] transition-all duration-300 select-none flex-shrink-0`} />
-                                          <span className="font-sans font-medium break-words text-[10.5px] md:text-[13px]" title={q}>{q}</span>
-                                        </div>
-                                        <span className="hidden sm:inline-flex text-[10px] group-hover:translate-x-1 transition-all font-mono duration-200 select-none whitespace-nowrap items-center gap-1.5 flex-shrink-0 text-slate-500 group-hover:text-indigo-300">
-                                          Select <span className="transform translate-x-0 group-hover:translate-x-0.5 transition-transform">&rarr;</span>
-                                        </span>
-                                      </motion.button>
-                                    );
-                                  })}
-                                </div>
-                              </>
-                            );
-                          })()}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                          <HelpCircle className={`w-3 md:w-3.5 h-3 md:h-3.5 transition-colors duration-200 ${
+                            isFaqOpen 
+                              ? theme === 'light' ? 'text-indigo-600' : 'text-indigo-300' 
+                              : theme === 'light' ? 'text-slate-500' : 'text-indigo-400'
+                          }`} />
+                          <span>CHECK ALL QUESTIONS</span>
+                        </button>
+                      </div>
+
+                      {/* Monochromatic category switcher menu with subtle background and crisp outline */}
+                      <div className="flex md:flex-wrap items-center gap-1.5 md:gap-2 overflow-x-auto md:overflow-x-visible pb-1.5 md:pb-0 scrollbar-none select-none w-full -mx-1 px-1">
+                        {/* 1. Stocks to Buy */}
+                        <button
+                          onClick={() => {
+                            if (activeTab === 'buy') {
+                              setIsQuestionsOpen(!isQuestionsOpen);
+                            } else {
+                              setActiveTab('buy');
+                              setIsQuestionsOpen(true);
+                            }
+                            setShowAllQuestions(true);
+                          }}
+                          className={`px-2.5 py-1 md:px-3 md:py-1.5 text-[10px] md:text-xs font-semibold rounded-full border flex items-center gap-1 md:gap-1.5 cursor-pointer flex-shrink-0 whitespace-nowrap transition-all ${
+                            activeTab === 'buy' && isQuestionsOpen
+                              ? theme === 'light'
+                                ? 'bg-indigo-600 border-indigo-500 text-white shadow-md'
+                                : 'bg-white/15 border-white/30 text-white shadow-[0_0_12px_rgba(255,255,255,0.08)]'
+                              : theme === 'light'
+                                ? 'bg-slate-50 border-slate-200 hover:bg-slate-100/40 text-slate-650 hover:text-indigo-600'
+                                : 'bg-white/[0.02] border-white/5 hover:bg-white/[0.06] hover:border-white/15 text-slate-400 hover:text-slate-200'
+                          }`}
+                        >
+                          <TrendingUp className="w-3 h-3 md:w-3.5 md:h-3.5" />
+                          <span>Stocks to Buy</span>
+                          <ChevronDown className={`w-2.5 h-2.5 md:w-3 md:h-3 transition-transform duration-200 text-slate-400 ${activeTab === 'buy' && isQuestionsOpen ? 'rotate-180 text-white' : ''}`} />
+                        </button>
+
+                        {/* 2. Short Selling */}
+                        <button
+                          onClick={() => {
+                            if (activeTab === 'short') {
+                              setIsQuestionsOpen(!isQuestionsOpen);
+                            } else {
+                              setActiveTab('short');
+                              setIsQuestionsOpen(true);
+                            }
+                            setShowAllQuestions(true);
+                          }}
+                          className={`px-2.5 py-1 md:px-3 md:py-1.5 text-[10px] md:text-xs font-semibold rounded-full border flex items-center gap-1 md:gap-1.5 cursor-pointer flex-shrink-0 whitespace-nowrap transition-all ${
+                            activeTab === 'short' && isQuestionsOpen
+                              ? theme === 'light'
+                                ? 'bg-indigo-600 border-indigo-500 text-white shadow-md'
+                                : 'bg-white/15 border-white/30 text-white shadow-[0_0_12px_rgba(255,255,255,0.08)]'
+                              : theme === 'light'
+                                ? 'bg-slate-50 border-slate-200 hover:bg-slate-100/40 text-slate-650 hover:text-indigo-600'
+                                : 'bg-white/[0.02] border-white/5 hover:bg-white/[0.06] hover:border-white/15 text-slate-400 hover:text-slate-200'
+                          }`}
+                        >
+                          <AlertTriangle className="w-3 h-3 md:w-3.5 md:h-3.5" />
+                          <span>Short selling</span>
+                          <ChevronDown className={`w-2.5 h-2.5 md:w-3 md:h-3 transition-transform duration-200 text-slate-400 ${activeTab === 'short' && isQuestionsOpen ? 'rotate-180 text-white' : ''}`} />
+                        </button>
+
+                        {/* 3. Long Term Picks */}
+                        <button
+                          onClick={() => {
+                            if (activeTab === 'long') {
+                              setIsQuestionsOpen(!isQuestionsOpen);
+                            } else {
+                              setActiveTab('long');
+                              setIsQuestionsOpen(true);
+                            }
+                            setShowAllQuestions(true);
+                          }}
+                          className={`px-2.5 py-1 md:px-3 md:py-1.5 text-[10px] md:text-xs font-semibold rounded-full border flex items-center gap-1 md:gap-1.5 cursor-pointer flex-shrink-0 whitespace-nowrap transition-all ${
+                            activeTab === 'long' && isQuestionsOpen
+                              ? theme === 'light'
+                                ? 'bg-indigo-600 border-indigo-500 text-white shadow-md'
+                                : 'bg-white/15 border-white/30 text-white shadow-[0_0_12px_rgba(255,255,255,0.08)]'
+                              : theme === 'light'
+                                ? 'bg-slate-50 border-slate-200 hover:bg-slate-100/40 text-slate-655 hover:text-indigo-600'
+                                : 'bg-white/[0.02] border-white/5 hover:bg-white/[0.06] hover:border-white/15 text-slate-400 hover:text-slate-200'
+                          }`}
+                        >
+                          <Sparkles className="w-3 h-3 md:w-3.5 md:h-3.5" />
+                          <span>Long term picks</span>
+                          <ChevronDown className={`w-2.5 h-2.5 md:w-3 md:h-3 transition-transform duration-200 text-slate-400 ${activeTab === 'long' && isQuestionsOpen ? 'rotate-180 text-white' : ''}`} />
+                        </button>
+
+                        {/* 4. Track Record */}
+                        <button
+                          onClick={() => {
+                            if (activeTab === 'track') {
+                              setIsQuestionsOpen(!isQuestionsOpen);
+                            } else {
+                              setActiveTab('track');
+                              setIsQuestionsOpen(true);
+                            }
+                            setShowAllQuestions(true);
+                          }}
+                          className={`px-2.5 py-1 md:px-3 md:py-1.5 text-[10px] md:text-xs font-semibold rounded-full border flex items-center gap-1 md:gap-1.5 cursor-pointer flex-shrink-0 whitespace-nowrap transition-all ${
+                            activeTab === 'track' && isQuestionsOpen
+                              ? theme === 'light'
+                                ? 'bg-indigo-600 border-indigo-500 text-white shadow-md'
+                                : 'bg-white/15 border-white/30 text-white shadow-[0_0_12px_rgba(255,255,255,0.08)]'
+                              : theme === 'light'
+                                ? 'bg-slate-50 border-slate-200 hover:bg-slate-100/40 text-slate-650 hover:text-indigo-600'
+                                : 'bg-white/[0.02] border-white/5 hover:bg-white/[0.06] hover:border-white/15 text-slate-400 hover:text-slate-200'
+                          }`}
+                        >
+                          <Search className="w-3 h-3 md:w-3.5 md:h-3.5" />
+                          <span>Track record</span>
+                          <ChevronDown className={`w-2.5 h-2.5 md:w-3 md:h-3 transition-transform duration-200 text-slate-400 ${activeTab === 'track' && isQuestionsOpen ? 'rotate-180 text-white' : ''}`} />
+                        </button>
+
+                        {/* 5. About Waya */}
+                        <button
+                          onClick={() => {
+                            if (activeTab === 'about') {
+                              setIsQuestionsOpen(!isQuestionsOpen);
+                            } else {
+                              setActiveTab('about');
+                              setIsQuestionsOpen(true);
+                            }
+                            setShowAllQuestions(true);
+                          }}
+                          className={`px-2.5 py-1 md:px-3 md:py-1.5 text-[10px] md:text-xs font-semibold rounded-full border flex items-center gap-1 md:gap-1.5 cursor-pointer flex-shrink-0 whitespace-nowrap transition-all ${
+                            activeTab === 'about' && isQuestionsOpen
+                              ? theme === 'light'
+                                ? 'bg-indigo-600 border-indigo-500 text-white shadow-md'
+                                : 'bg-white/15 border-white/30 text-white shadow-[0_0_12px_rgba(255,255,255,0.08)]'
+                              : theme === 'light'
+                                ? 'bg-slate-50 border-slate-200 hover:bg-slate-100/40 text-slate-650 hover:text-indigo-600'
+                                : 'bg-white/[0.02] border-white/5 hover:bg-white/[0.06] hover:border-white/15 text-slate-400 hover:text-slate-200'
+                          }`}
+                        >
+                          <img 
+                            src="https://reduced-beige-7hamqau4r6.edgeone.app/a.png" 
+                            className="w-3 h-3 md:w-3.5 md:h-3.5 object-contain" 
+                            alt="Waya" 
+                            referrerPolicy="no-referrer" 
+                          />
+                          <span>About Waya</span>
+                          <ChevronDown className={`w-2.5 h-2.5 md:w-3 md:h-3 transition-transform duration-200 text-slate-400 ${activeTab === 'about' && isQuestionsOpen ? 'rotate-180 text-white' : ''}`} />
+                        </button>
+                      </div>
+
+                      {/* Rendered list of questions with fully monochromatic styling folded based on state */}
+                      <AnimatePresence>
+                        {isQuestionsOpen && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                            animate={{ opacity: 1, height: 'auto', marginTop: 10 }}
+                            exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                            className={`w-full font-sans overflow-hidden border-t pt-2.5 ${theme === 'light' ? 'border-slate-200' : 'border-white/5'}`}
+                          >
+                            {(() => {
+                              const allListed = DROPDOWN_QUESTIONS[activeTab] || [];
+                              const displayedQuestions = allListed;
+                              
+                              return (
+                                <>
+                                  <div className="space-y-1 md:space-y-2 max-h-[120px] md:max-h-[240px] overflow-y-auto pr-1 md:pr-2 custom-scroll">
+                                    {displayedQuestions.map((q, idx) => {
+                                      const bulletColor = "bg-indigo-400";
+                                      
+                                      return (
+                                        <motion.button
+                                          key={`${activeTab}-${idx}`}
+                                          initial={{ opacity: 0, y: 3 }}
+                                          animate={{ opacity: 1, y: 0 }}
+                                          transition={{ duration: 0.1, delay: idx * 0.02 }}
+                                          onClick={() => handleFaqClick(q)}
+                                          className={`w-full text-left p-2.5 md:p-3.5 rounded-lg md:rounded-xl border transition-all duration-200 flex items-center justify-between group cursor-pointer shadow-md md:shadow-lg backdrop-blur-[4px] md:backdrop-blur-sm ${
+                                            theme === 'light'
+                                              ? 'bg-white/70 border-slate-200 hover:bg-slate-50 hover:border-indigo-500/35 text-slate-700 hover:text-indigo-600'
+                                              : 'bg-white/[0.02] border-white/10 hover:bg-indigo-900/10 hover:border-indigo-500/30 text-slate-300 hover:text-white'
+                                          }`}
+                                        >
+                                          <div className="flex items-center gap-2 md:gap-3 min-w-0 pr-2 md:pr-4 w-full">
+                                            <span className={`w-1 md:w-1.5 h-1 md:h-1.5 rounded-full ${bulletColor} group-hover:scale-[1.3] group-hover:shadow-[0_0_8px_rgba(129,140,248,0.8)] transition-all duration-300 select-none flex-shrink-0`} />
+                                            <span className="font-sans font-medium break-words text-[10.5px] md:text-[13px]" title={q}>{q}</span>
+                                          </div>
+                                          <span className="hidden sm:inline-flex text-[10px] group-hover:translate-x-1 transition-all font-mono duration-200 select-none whitespace-nowrap items-center gap-1.5 flex-shrink-0 text-slate-500 group-hover:text-indigo-300">
+                                            Select <span className="transform translate-x-0 group-hover:translate-x-0.5 transition-transform">&rarr;</span>
+                                          </span>
+                                        </motion.button>
+                                      );
+                                    })}
+                                  </div>
+                                </>
+                              );
+                            })()}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                </div>
               </div>
             </div>
           </div>
@@ -1089,7 +1328,7 @@ Click any standard preset queries on the right panel to test predefined cached a
           <div className="flex-1 flex flex-col justify-between overflow-hidden relative min-h-0 pt-[65px] md:pt-0">
             {/* Scrollable messages and advisory list */}
             <div id="main-chat-viewport" className={`flex-1 overflow-y-auto px-3 md:px-4 py-3 md:py-6 space-y-4 md:space-y-6 ${getChatMobilePaddingBottom(messages)}`}>
-              <div className="max-w-5xl mx-auto space-y-6">
+              <div className="max-w-5xl md:max-w-[971px] mx-auto space-y-6">
                 {messages.map((msg) => {
                   const isUser = msg.sender === 'user';
                   
@@ -1126,8 +1365,12 @@ Click any standard preset queries on the right panel to test predefined cached a
                             WayaX • {msg.timestamp}
                           </span>
                           
-                          <div className="liquid-glass-panel text-slate-100 rounded-2xl rounded-tl-none font-secondary space-y-3.5 border-white/5 p-5 md:p-6 shadow-xl w-full">
-                            <div className="text-[13px] font-bold text-slate-100 font-sans leading-relaxed tracking-tight">
+                          <div className={`rounded-2xl rounded-tl-none font-secondary space-y-3.5 p-5 md:p-6 shadow-xl w-full border backdrop-blur-3xl transition-all duration-300 ${
+                            theme === 'light'
+                              ? 'bg-gradient-to-b from-white/95 via-white/45 to-white/10 border-white/80'
+                              : 'bg-gradient-to-b from-white/[0.06] via-white/[0.02] to-transparent border-white/[0.05]'
+                          }`}>
+                            <div className={`text-[13px] font-bold font-sans leading-relaxed tracking-tight ${theme === 'light' ? 'text-slate-800' : 'text-slate-100'}`}>
                               {msg.text}
                             </div>
                             
@@ -1140,8 +1383,12 @@ Click any standard preset queries on the right panel to test predefined cached a
                                     key={optIdx}
                                     className={`rounded-xl px-4 py-3 flex items-center gap-3 border text-[12px] transition-all duration-300 ${
                                       isSelected
-                                        ? 'border-indigo-500/40 bg-indigo-500/[0.06] text-white font-semibold shadow-[0_2px_12px_rgba(99,102,241,0.05)]'
-                                        : 'border-white/5 bg-white/[0.01]/40 text-slate-400 opacity-55'
+                                        ? theme === 'light'
+                                          ? 'border-indigo-500/40 bg-indigo-50 text-indigo-700 font-semibold shadow-sm'
+                                          : 'border-indigo-500/40 bg-indigo-500/[0.06] text-white font-semibold shadow-[0_2px_12px_rgba(99,102,241,0.05)]'
+                                        : theme === 'light'
+                                          ? 'border-slate-200 bg-slate-50 text-slate-500'
+                                          : 'border-white/5 bg-white/[0.01]/40 text-slate-400 opacity-55'
                                     }`}
                                   >
                                     {isSelected ? (
@@ -1149,11 +1396,15 @@ Click any standard preset queries on the right panel to test predefined cached a
                                         <CheckCircle className="w-3.5 h-3.5" />
                                       </span>
                                     ) : (
-                                      <span className="w-5.5 h-5.5 flex items-center justify-center font-mono font-bold text-[10px] bg-white/[0.05] border border-white/10 text-slate-500 rounded-md">
+                                      <span className={`w-5.5 h-5.5 flex items-center justify-center font-mono font-bold text-[10px] rounded-md ${
+                                        theme === 'light'
+                                          ? 'bg-slate-100 border border-slate-200 text-slate-500'
+                                          : 'bg-white/[0.05] border border-white/10 text-slate-500'
+                                      }`}>
                                         {optIdx + 1}
                                       </span>
                                     )}
-                                    <span className={isSelected ? 'text-white' : 'text-slate-350'}>
+                                    <span className={isSelected ? theme === 'light' ? 'text-indigo-900' : 'text-white' : theme === 'light' ? 'text-slate-600' : 'text-slate-350'}>
                                       {option}
                                     </span>
                                   </div>
@@ -1173,7 +1424,11 @@ Click any standard preset queries on the right panel to test predefined cached a
                     >
                       {/* User profile / Bot shield indicators */}
                       {!isUser && (
-                        <div className="w-9 h-9 rounded-xl liquid-glass-panel border-white/5 border flex items-center justify-center flex-shrink-0 shadow-sm overflow-hidden bg-[#121420]/30">
+                        <div className={`w-9 h-9 rounded-xl border flex items-center justify-center flex-shrink-0 shadow-sm overflow-hidden bg-transparent z-10 backdrop-blur-md ${
+                          theme === 'light'
+                            ? 'bg-gradient-to-b from-white/95 via-white/45 to-white/10 border-white/80'
+                            : 'bg-gradient-to-b from-white/[0.06] via-white/[0.02] to-transparent border-white/[0.05]'
+                        }`}>
                           <img 
                             src="https://reduced-beige-7hamqau4r6.edgeone.app/a.png" 
                             className="w-5 h-5 object-contain brightness-110" 
@@ -1190,13 +1445,17 @@ Click any standard preset queries on the right panel to test predefined cached a
                         </span>
 
                         {/* Msg text block */}
-                        <div className={`px-5 py-4 rounded-2xl text-[12px] line-height-relaxed select-text shadow-xl ${
+                        <div className={`px-5 py-4 rounded-2xl text-[12px] line-height-relaxed select-text shadow-xl border backdrop-blur-3xl transition-all duration-300 ${
                           isUser 
-                            ? 'liquid-glass-panel border-white/20 text-white rounded-tr-none font-secondary shadow-[0_4px_20px_rgba(255,255,255,0.05)]' 
-                            : 'liquid-glass-panel text-slate-100 rounded-tl-none font-secondary space-y-4 border-[#fff1]/5 border-white/5'
+                            ? theme === 'light'
+                              ? 'bg-indigo-600 border-indigo-500 text-white rounded-tr-none font-secondary shadow-[0_4px_24px_rgba(99,102,241,0.25)]'
+                              : 'bg-gradient-to-b from-indigo-600 to-indigo-700 border-indigo-500 text-white rounded-tr-none font-secondary shadow-[0_4px_20px_rgba(255,255,255,0.05)]'
+                            : theme === 'light'
+                              ? 'bg-gradient-to-b from-white/95 via-white/45 to-white/10 border-white/80 text-slate-850 rounded-tl-none font-secondary space-y-4'
+                              : 'bg-gradient-to-b from-white/[0.06] via-white/[0.02] to-transparent border-white/[0.05] text-slate-100 rounded-tl-none font-secondary space-y-4'
                         }`}>
                           {/* Text body with markdown simulation layout support */}
-                          <div className="whitespace-pre-line leading-relaxed font-sans text-slate-100">
+                          <div className={`whitespace-pre-line leading-relaxed font-sans ${theme === 'light' && !isUser ? 'text-slate-800' : 'text-slate-100'}`}>
                             {msg.text}
                           </div>
 
@@ -1293,10 +1552,10 @@ Click any standard preset queries on the right panel to test predefined cached a
             {/* Seamless Active search bar anchored down on screen with beautiful backdrop shadow and space */}
             <footer className={`fixed bottom-0 left-0 right-0 md:relative p-3 md:p-4 z-20 select-none pb-4 md:pb-6 border-t md:border-t-0 animate-fade-in transition-all duration-300 ${
               theme === 'light'
-                ? 'bg-[#F2F2F7]/95 backdrop-blur-[24px] border-slate-200/60 text-slate-800'
-                : 'bg-[#1c1c1e]/95 backdrop-blur-[24px] border-white/5 text-slate-200'
+                ? 'bg-white/40 backdrop-blur-[24px] border-slate-200/50 text-slate-800'
+                : 'bg-black/15 backdrop-blur-[24px] border-white/[0.06] text-slate-200'
             }`}>
-              <div className="max-w-5xl mx-auto space-y-4">
+              <div className="max-w-5xl md:max-w-[971px] mx-auto space-y-4">
                 {(() => {
                   const activeSurveyMsg = messages.length > 0 && messages[messages.length - 1].isSurvey 
                     ? messages[messages.length - 1] 

@@ -80,14 +80,11 @@ export default function FAQDrawer({ onQuestionClick, isOpen, onToggle, theme = '
   return (
     <div 
       id="right-faq-panel" 
-      className={`w-80 fixed md:relative right-0 top-0 bottom-0 z-45 flex flex-col h-full select-none transition-all duration-300 ${
+      className={`w-80 fixed md:relative right-0 top-0 bottom-0 z-45 flex flex-col h-full select-none transition-all duration-300 border-l shadow-2xl backdrop-blur-3xl ${
         theme === 'light'
-          ? 'bg-[#F2F2F7] md:bg-transparent text-slate-800'
-          : 'text-slate-100'
-      } liquid-glass-panel border-l border-white/5 md:border-white/10`}
-      style={{
-        backgroundColor: theme === 'light' ? undefined : '#1c1c1e'
-      }}
+          ? 'text-slate-800 bg-gradient-to-b from-white/95 via-white/45 to-white/10 border-white/80'
+          : 'text-slate-100 bg-gradient-to-b from-white/[0.06] via-white/[0.02] to-transparent border-white/[0.05]'
+      }`}
     >
       {/* Header */}
       <div className={`p-4 flex items-center justify-between border-b ${theme === 'light' ? 'border-slate-200' : 'border-white/5'}`}>
